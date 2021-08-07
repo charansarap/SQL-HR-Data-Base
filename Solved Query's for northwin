@@ -1,0 +1,33 @@
+use northwind
+#Q1
+select productname,quantityperunit from products
+#Q2
+select productid,productname from products
+#Q3
+select productid,productname from products
+where discontinued = 1
+#Q4
+select productname,unitprice from products
+order by unitprice desc
+#Q5
+select productid,productname,unitprice from products
+where unitprice < 20
+#Q6
+select productid,productname,unitprice from products
+where unitprice between 15 and 25
+#Q7
+select productid,productname,unitprice from products
+where unitprice > (select avg(unitprice) from products)
+order by unitprice
+#Q8
+select distinct(productname),unitprice from products
+order by unitprice desc
+limit 20
+#Q9
+select count(productname) from products
+group by Discontinued
+#10
+select productname,unitsonorder,unitsinstock from products
+where Discontinued = false and unitsinstock < unitsonorder
+
+
