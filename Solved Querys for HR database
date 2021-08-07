@@ -1,0 +1,124 @@
+select * from countries
+#Q1
+select first_name as"Firstname",last_name as "Lastname" from employees
+#Q2
+select distinct(department_id) from employees
+#Q3
+select * from employees
+order by first_name desc
+#Q4
+select first_name,last_name,salary, round(((salary *15)/100),2)as PF_amount from employees
+#Q5
+select employee_id,first_name,last_name,salary from employees
+order by salary asc
+#Q6
+select sum(salary) as total_payable from employees
+#Q7
+select max(salary) as Max_salary, min(salary) as Min_salary from employees
+#Q8
+select round(avg(salary),2) as avg_salary, count(employee_id) as employees_count from employees
+#Q9
+select count(employee_id) as No_of_employees from employees
+where employee_id not in (select employee_id from job_history)
+#Q10
+select count(job_id) as No_of_jobs from employees
+#Q11
+select upper(first_name) from employees
+#Q12
+select left(first_name,3)  as first_3_words from employees
+#Q13
+select ltrim(rtrim(left(first_name,3))) as first_3_words from employees
+#Q14
+select length(concat(first_name,last_name)) as len_names from employees
+#Q15
+SELECT first_name FROM employees 
+WHERE first_name LIKE ('%[0-9]%')
+#or
+select first_name from employees
+where first_name regexp '[0-9]'
+#Q16
+select first_name,last_name from employees
+where salary not between 10000 and 15000
+#Q17
+select first_name,last_name,department_id from employees
+where department_id in(30,100)
+#using or 
+select first_name,last_name,department_id from employees
+where department_id = 30 or 100
+#Q18
+select First_name,last_name,salary,department_id from employees
+where salary not between 10000 and 15000 and department_id in (30,100)
+#Q19
+select first_name,last_name,hire_date from employees
+where year(hire_date) = 1987
+#Q20
+select first_name from employees
+where first_name like ('%b%') or first_name like ('%c%')
+#21
+select first_name,last_name,Job_title,salary from employees e
+join jobs j on j.job_id = e.job_id
+where job_title = 'Programmer' or job_title = 'Shipping clerk'
+and salary not in (4500,10000,15000)
+#22
+select last_name from employees
+where length(last_name) = 6
+#23
+select last_name from employees
+where last_name like('__e%')
+#24
+select job_id,group_concat(employee_id) as employees_id from employees
+group by job_id
+#25
+UPDATE employees 
+SET phone_number = REPLACE(phone_number, '124', '999') 
+WHERE phone_number LIKE '%124%'
+#26
+select first_name from employees
+where length(first_name) >= 8 
+#27
+select concat(email,'@example.com') as emailid from employees
+or
+update employees
+set email = concat(email,'@example.com')
+#28
+select right(phone_number,4) as last4 from employees
+#29
+select street_address from locations
+#30
+select  SUBSTRING_INDEX(street_address,' ',-1) as last_word from locations
+#31
+select job_title, substr(job_title,1,instr(job_title,' ')-1) as first_word from jobs
+#32
+select length(first_name) as len from employees
+where instr(last_name,'c')>2
+#33
+SELECT 
+    first_name AS name, LENGTH(first_name) length_firstanme
+FROM
+    employees
+WHERE
+    first_name LIKE ('a%')
+        OR first_name LIKE ('j%')
+        OR first_name LIKE ('m%')
+ORDER BY first_name
+#34
+select first_name,lpad(salary,10,'$') as salary from employees
+#35
+SELECT 
+    LEFT(first_name, 8),
+    REPEAT('$', FLOOR(salary / 1000)) AS 'salary($)',
+    salary
+FROM
+    employees
+order by salary desc
+#36
+select employee_id,first_name,last_name,hire_date from employees
+where day(hire_date) = 7 or month(hire_date) = 7
+
+
+
+
+
+
+
+
