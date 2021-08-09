@@ -1,0 +1,163 @@
+use HR
+#Q1
+select first_name,last_name from employees
+where salary > (select salary from employees
+where employee_id = 163)
+#Q2
+select first_name,last_name,salary,department_id,job_id from employees
+where job_id = (select job_id from employees
+where employee_id = 169)
+#Q3
+select first_name,last_name,salary,department_id from employees
+where salary in (select min(salary) from employees
+group by department_id)
+#Q4
+select first_name,last_name from employees
+where salary > (select avg(salary) from employees)
+#Q5
+select first_name,last_name,employee_id,salary from employees 
+where manager_id = (select employee_id from employees where first_name = 'payam')
+#Q6
+select e.department_id,first_name,last_name,job_id,d.department_name from employees e
+left join departments d on d.department_id = e.department_id
+where e.department_id = (select department_id from departments where department_name  = 'Finance')
+#or
+select e.department_id,first_name,last_name,job_id,d.department_name from employees e
+left join departments d on d.department_id = e.department_id
+where department_name = 'finance'
+#Q7
+select * from employees
+where salary = 3000 and manager_id =121
+#Q8
+select department_id,first_name,last_name,salary from employees
+where employee_id in (select employee_id from employees
+group by department_id
+having max(salary))
+or
+select department_id,first_name,last_name,salary from employees a
+where salary in (select max(salary) from employees
+where department_id=a.department_id)
+#Q9
+select *from departments
+where manager_id in (select d.manager_id from employees e
+join departments d on d.manager_id = e.employee_id
+where first_name = 'susan')
+or
+SELECT * 
+	FROM departments 
+	WHERE manager_id IN 
+	(SELECT employee_id 
+		FROM employees 
+			WHERE first_name='Susan');
+#Q10
+with salary_ranking(empid,salaryranks)
+as (select employee_id,salary,dense_rank() over(order by salary asc) as salary_ranking from employees)
+select * from salary_ranking
+where salaryranks = 2
+#or 
+select * from employees e
+where 2 =(select count(distinct(salary)) from employees
+where salary <= e.salary)
+#Q11
+select * from Jobs
+where job_id in(select jh.job_id from job_history jh
+left join  employees e on e.employee_id = jh.employee_id
+where jh.job_id = 'SA_REP')
+
+#12
+select first_name,last_name from employees
+where employee_id in (select manager_id from employees
+group by manager_id
+having count(*) >=4)
+#or
+select * from employees 
+where employee_id in (select manager_id from employees
+group by manager_id
+having count(employee_id) >=4)
+#13
+select * from departments
+where department_id in (select department_id from employees
+group by department_id
+having min(salary)>= 8000)
+#14
+select * from departments
+where department_id in (select e.department_id from employees e
+join job_history jh on jh.employee_id = e.employee_id
+group by e.department_id
+having count(jh.employee_id) >1 and  max(salary) > 7000)
+#or
+select * from departments
+where department_id in (select department_id from employees
+where employee_id in (select employee_id from job_history
+group by employee_id
+having count(employee_id) >1)
+group by department_id
+having max(salary) > 7000)
+#15
+select city from locations
+where location_id in (select location_id from departments d
+join employees e on e.department_id = d.department_id
+where e.employee_id =134)
+#16
+select concat(first_name, " ", last_name) as full_name,salary,department_id from employees
+where department_id in (select department_id from departments d 
+join locations l on l.location_id = d.location_id
+where l.city ='london')
+#17
+select first_name,last_name,department_id from employees
+where salary < (select avg(salary) from employees)
+and department_id = (select department_id from employees
+where first_name = 'laura')
+#18
+select first_name,last_name,salary,department_id from employees
+where salary < (select min(salary) from employees where department_id = 70)
+#19
+select concat(first_name, " ", last_name) as full_name,hire_date from employees
+where hire_date > (select hire_date from employees
+where employee_id=165)
+#20
+select first_name,last_name,salary,department_id from employees
+where salary > all (select salary from employees
+where department_id = 40)
+or
+select first_name,last_name,salary,department_id from employees
+where salary >  (select min(salary)from employees
+where department_id = 40)
+or
+SELECT first_name, last_name, salary, department_id 
+ FROM employees
+  WHERE salary > ANY 
+    (SELECT salary 
+       FROM employees 
+          WHERE department_id = 40)
+
+#21
+select first_name,last_name,salary,department_id from employees 
+where department_id = (select department_id from employees
+where employee_id = 201)
+#21
+select department_name,department_id,from departments
+where location_id = (select location_id from departments where department_id = 30)
+#22
+select first_name,last_name,salary,department_id from employees
+where salary > (select max(salary) from employees
+where department_id = 40
+group by department_id)
+#23
+select first_name,last_name,salary,department_id from employees
+where salary > (select avg(salary)from employees)
+order by salary desc
+#24
+select department_id,department_name from departments	
+where location_id = (select location_id from locations where city = 'london')
+#Or using join
+select department_id,department_name from departments	d
+join locations l on l.location_id = d.location_id
+where city='london'
+#25
+select first_name,last_name,salary,e.department_id,l.city from employees e
+join departments d on d.department_id = e.department_id
+join locations l on l.location_id =d.location_id
+where salary > (select max(salary) from employees
+where hire_date between '01/01/2002' AND '12/31/2003'
+group by employee_id)
